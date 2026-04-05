@@ -1,38 +1,20 @@
 # poke-analytics-fastapi
 
-Idea de Estructura
-
-poke-analytics-fastapi/
-├── app/
-│   ├── __init__.py
-│   ├── main.py          # Punto de entrada de FastAPI
-│   ├── database.py      # Configuración de SQLAlchemy
-│   ├── models.py        # Tablas de SQL
-│   ├── schemas.py       # Validaciones de Pydantic
-│   └── services.py      # Lógica para llamar a la PokeAPI
-├── .gitignore
-├── requirements.txt
-└── README.md
-
+Este proyecto es una herramienta de ingeniería de datos y visualización construida con **FastAPI**. El sistema consume datos de la **PokeAPI**, los persiste en una base de datos **SQLite** mediante un ORM y realiza análisis estadísticos con **Pandas**.
 
 ---
-# Creación de entorno virtual
 
-python -m venv venv
+## Arquitectura del Proyecto
 
-# Teoría de arquitectura
-
-- __init__.py: Dice a python "este es un paquete de código", permitiendo que archivos hablen entre si.
-- database.py: Aquí vamos a configurar la conexión de la base
-- models.py: Aquí vamos a definir las tablas
-- schemas.py: aqui definimos lo que queremos recibir.
-- services.py: Aquí pondremos la lógica.
-
-# Librerias a utilizar
-
-pip install fastapi uvicorn sqlalchemy httpx
-
-- fastAPI: Nuestro Framework web
-- Uvicorn: el servidor
-- SQLAlchemy: ORM (Traductor de Python a SQL)
-- Httpx: para hacer peticiones "Asíncronas"
+```text
+poke-analytics-fastapi/
+├── app/
+│   ├── __init__.py      # Define la carpeta como paquete Python
+│   ├── main.py          # Punto de entrada y Endpoints de FastAPI
+│   ├── database.py      # Configuración de conexión SQLAlchemy
+│   ├── models.py        # Definición de tablas SQL (Modelos)
+│   ├── schemas.py       # Esquemas de validación (Pydantic)
+│   └── services.py      # Lógica de negocio y consumo de PokeAPI
+├── .gitignore           # Archivos excluidos de Git (venv, .db, etc.)
+├── requirements.txt     # Dependencias del proyecto
+└── README.md            # Documentación
