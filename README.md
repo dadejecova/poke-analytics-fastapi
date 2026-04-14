@@ -16,5 +16,12 @@ poke-analytics-fastapi/
 │   ├── schemas.py       # Esquemas de validación (Pydantic)
 │   └── services.py      # Lógica de negocio y consumo de PokeAPI
 ├── .gitignore           # Archivos excluidos de Git (venv, .db, etc.)
+├── dashboard.py         # Dashboard usando Streamlit
 ├── requirements.txt     # Dependencias del proyecto
 └── README.md            # Documentación
+
+
+## FastAPI
+uvicorn app.main:app --reload
+## Streamlit
+streamlit run dashboard.py
