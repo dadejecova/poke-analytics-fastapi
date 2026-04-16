@@ -12,4 +12,7 @@ class Pokemon(Base):
     hp = Column(Integer)
     attack = Column(Integer)
     defense = Column(Integer)
+    special_attack = Column(Integer)
+    special_defense = Column(Integer)
+    speed = Column(Integer)
     sprite_url = Column(String)

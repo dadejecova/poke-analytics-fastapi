@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 # Pag config
 st.set_page_config(page_title="Poke-analytics", layout="wide")
@@ -39,36 +40,72 @@ if poke_name:
             col1, col2 = st.columns([1,2])
 
             with col1:
-                st.image(poke["sprite_url"], width=200)
-            
+                #st.image(poke["sprite_url"], width=200)
+                st.image(poke["sprite_url"], width='stretch')
+                st.subheader(f"#{poke['id']} {poke['name'].capitalize()}")
+                st.write(f"**Tipos:** {poke['type_1']} / {poke['type_2'] or ''}")            
+                
             with col2:
-                st.subheader(f"Nombre: {poke['name'].capitalize()}")
-                st.write(f"**Tipo 1:** {poke['type_1']} | **Tipo 2:** {poke['type_2'] or 'N/A'}")
-                st.metric("Puntos de vida (HP)", poke["hp"])
-                st.progress(poke["attack"] / 150, text=f"Ataque: {poke['attack']}")
+                # Mostramos las mètcicas en una fila
+                m1, m2, m3, m4, m5, m6 = st.columns(6)
+                m1.metric("HP", poke["hp"])
+                m2.metric("Atk", poke["attack"])
+                m3.metric("Def", poke["defense"])
+                m4.metric("Sp. Atk", poke["special_attack"])
+                m5.metric("Sp. Def", poke["special_defense"])
+                m6.metric("Speed", poke["speed"])
+
+                # Colores
+                type_colros = {
+                    "fire": "#FF4422", "water": "#3399FF", "grass": "#77CC55",
+                    "electric": "#FFCC33", "psychic": "#FF5599", "rock": "#BBAA66",
+                    "poison": "#AA5599", "ground": "#DDBB55", "normal": "#AAAA99"
+                }
+
+                main_color = type_colros.get(poke['type_1'], "FF4B4B")
+
+                # Datos para el grafico
+                categories = ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed']
+                values = [poke['hp'], poke['attack'], poke['defense'], poke['special_attack'], poke['special_defense'], poke['speed']]
+                fig = go.Figure()
+
+
+                # Area del poke 
+                fig.add_trace(go.Scatterpolar(
+                    r=values + [values[0]],
+                    theta = categories + [categories[0]],
+                    fill = 'toself',
+                    name=poke['name'].capitalize(),
+                    line_color = main_color,
+                    fillcolor = main_color,
+                    opacity= 0.6
+                ))
+
+                # Ajuste del disño
+                fig.update_layout(
+                    polar=dict(
+                        radialaxis=dict(
+                            visible=True, 
+                            range=[0,160], 
+                            gridcolor="#444", 
+                            showticklabels=False
+                        ),
+                        angularaxis=dict(
+                            gridcolor="#444",
+                            tickfont=dict(size=12, color="white")
+                            )
+                    ),
+                    showlegend=False,
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    margin=dict(l=40, r=40, t=40, b=40)
+                )
+
+                st.plotly_chart(fig, width='stretch')
+
         else:
             st.warning("Poke no encontrado en la base ni el API.")
     except Exception as e:
         st.error(f"Error de conexión: {e}")
 
 st.divider()
-
-# Analitica parte
-st.header("Análisis de poder por tipo")
-if st.button("Generar gráfico de ataque"):
-    try:
-        res_analysis = requests.get(f"{api_url}/analytics/atack-by-type")
-        if res_analysis.status_code == 200:
-            data_dict = res_analysis.json()
-
-            # Se conveirte el json a un dataframe
-            df_plot = pd.DataFrame(list(data_dict.items()), columns=['Tipo', 'Ataque Promedio'])
-
-            # Grafico con plotly
-            fig = px.bar(df_plot, x='Tipo', y='Ataque Promedio',
-                         color='Ataque Promedio', title="Ranking por tipo de Ataque",
-                         color_continuous_scale='Reds')
-
-            st.plotly_chart(fig, use_container_width=True)
-    except Exception as e:
-        st.error("Error al obtener los datos análiticos")

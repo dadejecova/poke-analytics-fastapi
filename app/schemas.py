@@ -9,6 +9,9 @@ class PokemonBase(BaseModel):
     hp: int
     attack: int
     defense: int
+    special_attack: int   
+    special_defense: int
+    speed: int
     sprite_url: str
 
 class Pokemon(PokemonBase):
