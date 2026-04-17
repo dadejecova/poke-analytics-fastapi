@@ -15,7 +15,7 @@ async def get_pokemon_from_api(pokemon_name: str):
         data = response.json()
 
          #mapeo del json
-
+        moves_list = [m["move"]["name"] for m in data["moves"][:10]]
         pokemon_data = {
             "id": data["id"], 
             "name": data["name"],
@@ -27,8 +27,8 @@ async def get_pokemon_from_api(pokemon_name: str):
             "special_attack": data["stats"][3]["base_stat"],
             "special_defense": data["stats"][4]["base_stat"],
             "speed": data["stats"][5]["base_stat"],
-
-            "sprite_url": data["sprites"]["front_default"]
+            "sprite_url": data["sprites"]["front_default"],
+            "moves": ", ".join(moves_list)
         }
         return pokemon_data
     

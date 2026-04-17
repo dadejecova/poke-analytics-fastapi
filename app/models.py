@@ -16,3 +16,4 @@ class Pokemon(Base):
     special_defense = Column(Integer)
     speed = Column(Integer)
     sprite_url = Column(String)
+    moves = Column(String)

@@ -8,20 +8,24 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="PokeAnalytics API")
 
+@app.get("/pokemon/all", response_model=List[schemas.Pokemon])
+def get_all_pokemons(db: Session = Depends(get_db)):
+    # debemos que sacar los id
+    pokes = db.query(models.Pokemon).all()
+    print(f"Enviando {len(pokes)} pokes con datos")
+    #return db.query(models.Pokemon).all()
+    return pokes
+
 @app.get("/pokemon/{name}", response_model=schemas.Pokemon)
 async def get_pokemon(name: str, db: Session = Depends(get_db)):
     name = name.lower()
-
     db_pokemon = db.query(models.Pokemon).filter(models.Pokemon.name == name).first()
-
     if db_pokemon:
-        print("Se encontró en local")
+        #print("Se encontró en local")
         return db_pokemon
-    
     # Si no esta en la db se busca en pokeapi
-    print("No esta en la bd, buscamos en la API")
+    #print("No esta en la bd, buscamos en la API")
     api_data = await services.get_pokemon_from_api(name)
-
     if not api_data:
         raise HTTPException(status_code=404, detail = "Pokemon no encontrado")
     
@@ -30,8 +34,13 @@ async def get_pokemon(name: str, db: Session = Depends(get_db)):
     db.add(new_pokemon)
     db.commit()
     db.refresh(new_pokemon)
-
     return new_pokemon
+
+
+@app.get("/analytics/attack_by-type")
+def get_attack_analysis(db: Session = Depends(get_db)):
+    return services.get_pokemon_stats_analysis(db)
+    
 
 @app.post("/sync-pokemon")
 async def sync_pokemon(db: Session = Depends(get_db)):
@@ -57,14 +66,6 @@ async def sync_pokemon(db: Session = Depends(get_db)):
     return {"message": f"Sincronización completada. {counter} Nuevos pokos agregados"}
 
 
-@app.get("/pokemons", response_model=List[schemas.Pokemon])
-def get_all_pokemons(db: Session = Depends(get_db)):
-    # Consulta a la tabla
-    pokemons = db.query(models.Pokemon).all()
-    return pokemons
 
 
-@app.get("/analytics/attack_by-type")
-def get_attack_analysis(db: Session = Depends(get_db)):
-    analysiss = services.get_pokemon_stats_analysis(db)
-    return analysiss
+

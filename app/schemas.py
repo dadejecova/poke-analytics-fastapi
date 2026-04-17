@@ -13,6 +13,7 @@ class PokemonBase(BaseModel):
     special_defense: int
     speed: int
     sprite_url: str
+    moves: str
 
 class Pokemon(PokemonBase):
     class Config:
