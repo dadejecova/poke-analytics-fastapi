@@ -7,7 +7,7 @@ Este proyecto es una plataforma avanzada de análisis y visualización de Pokém
 ## Arquitectura del Proyecto
 El proyecto ha sido reestructurado para operar en ecosistemas aislados, permitiendo que cada componente gestione sus propias dependencias de forma eficiente:
 
-
+```text
 poke-analytics-fastapi/
 ├── backend/              # Microservicio de API (FastAPI)
 │   ├── app/              # Lógica, Modelos y Servicios
@@ -20,7 +20,7 @@ poke-analytics-fastapi/
 ├── docker-compose.yml    # Orquestador de contenedores
 ├── .gitignore            # Exclusiones de Git
 └── README.md             # Documentación técnica
-
+```
 ## Características Principales
 - Arquitectura Desacoplada: Comunicación fluida entre servicios independientes mediante redes internas de Docker.
 - Análisis Estadístico: Procesamiento de datos con Pandas y visualización avanzada con gráficos de radar en Plotly.
