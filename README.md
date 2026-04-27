@@ -1,27 +1,38 @@
-# poke-analytics-fastapi
+# Poke-Analytics: Full-Stack Microservices Dashboard
 
-Este proyecto es una herramienta de ingeniería de datos y visualización construida con **FastAPI**. El sistema consume datos de la **PokeAPI**, los persiste en una base de datos **SQLite** mediante un ORM y realiza análisis estadísticos con **Pandas**.
+Este proyecto es una plataforma avanzada de análisis y visualización de Pokémon, diseñada bajo una arquitectura de microservicios y completamente contenedorizada para un despliegue ágil. Representa una solución integral que separa la lógica de negocio (Backend) de la interfaz de usuario (Frontend), garantizando escalabilidad y orden.
 
 ---
 
 ## Arquitectura del Proyecto
+El proyecto ha sido reestructurado para operar en ecosistemas aislados, permitiendo que cada componente gestione sus propias dependencias de forma eficiente:
 
-```text
+
 poke-analytics-fastapi/
-├── app/
-│   ├── __init__.py      # Define la carpeta como paquete Python
-│   ├── main.py          # Punto de entrada y Endpoints de FastAPI
-│   ├── database.py      # Configuración de conexión SQLAlchemy
-│   ├── models.py        # Definición de tablas SQL (Modelos)
-│   ├── schemas.py       # Esquemas de validación (Pydantic)
-│   └── services.py      # Lógica de negocio y consumo de PokeAPI
-├── .gitignore           # Archivos excluidos de Git (venv, .db, etc.)
-├── dashboard.py         # Dashboard usando Streamlit
-├── requirements.txt     # Dependencias del proyecto
-└── README.md            # Documentación
+├── backend/              # Microservicio de API (FastAPI)
+│   ├── app/              # Lógica, Modelos y Servicios
+│   ├── Dockerfile        # Receta de construcción del Backend
+│   └── requirements.txt  # Dependencias específicas de la API
+├── frontend/             # Interfaz de Usuario (Streamlit)
+│   ├── dashboard.py      # Visualización y Dashboard interactivo
+│   ├── Dockerfile        # Receta de construcción del Frontend
+│   └── requirements.txt  # Dependencias de visualización
+├── docker-compose.yml    # Orquestador de contenedores
+├── .gitignore            # Exclusiones de Git
+└── README.md             # Documentación técnica
 
+## Características Principales
+- Arquitectura Desacoplada: Comunicación fluida entre servicios independientes mediante redes internas de Docker.
+- Análisis Estadístico: Procesamiento de datos con Pandas y visualización avanzada con gráficos de radar en Plotly.
+- Persistencia Inteligente: Almacenamiento local en SQLite mediante el ORM de SQLAlchemy para optimizar el consumo de la PokeAPI externa.
+- Ready for Production: Configuración lista para ser desplegada en cualquier servidor con soporte para Docker.
 
-## FastAPI
-uvicorn app.main:app --reload
-## Streamlit
-streamlit run dashboard.py
+## Stack
+- Backend: FastAPI, Uvicorn, SQLAlchemy, httpx.
+- Frontend: Streamlit, Plotly, Pandas.
+- Infraestructura: Docker, Docker Compose.
+
+## Instalación y ejecución con Docker
+Para levantar todo el ecosistema (API + Dashboard) con un solo comando, asegúrate de tener Docker instalado y ejecuta:
+
+docker-compose up --build

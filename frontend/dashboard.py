@@ -1,6 +1,8 @@
+import os
 import streamlit as st
 import requests
 import plotly.graph_objects as go
+
 
 # 1. CONFIGURACIÓN Y ESTILO (Para el scroll automático)
 st.set_page_config(page_title="Poke-analytics", layout="wide")
@@ -18,7 +20,9 @@ st.markdown("Poke Analysis 4 fun.")
 
 # 2. SIDEBAR
 st.sidebar.header("Config")
-api_url = st.sidebar.text_input("URL de la API", "http://127.0.0.1:8000")
+default_url = os.getenv("API_URL", "http://api:8000")
+api_url = st.sidebar.text_input("URL de la API", value=default_url)
+#api_url = st.sidebar.text_input("URL de la API", "http://127.0.0.1:8000")
 
 if st.sidebar.button("Verify Connection"):
     try:
